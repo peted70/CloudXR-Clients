@@ -1,0 +1,23 @@
+{
+    "name": "Android Development Container",
+    "build": {
+      "dockerfile": "Dockerfile",
+      "context": ".."
+    },
+    "mounts": [
+      "source=/dev/bus/usb,target=/dev/bus/usb,type=bind"
+    ],
+    "runArgs": [
+      "--privileged"
+    ],
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "ms-vscode.cpptools",
+          "ms-azuretools.vscode-docker"
+        ]
+      }
+    },
+    "remoteUser": "vscode"
+  }
+  
