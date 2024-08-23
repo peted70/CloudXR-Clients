@@ -15,12 +15,24 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Fetch Release Metadata
+- name: Fetch Release Metadata
       id: fetch_release
       run: |
+        # Fetch the release metadata
         release_info=$(curl -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/peted70/CloudXR-Clients/releases/latest)
         echo "$release_info" > release_info.json
+
+        # Print the release info for debugging
+        cat release_info.json
+
+        # Extract the asset URL
         asset_url=$(echo "$release_info" | jq -r '.assets[] | select(.name == "CloudXR-SDK_4_0_0.zip") | .browser_download_url')
+
+        if [ -z "$asset_url" ]; then
+          echo "Error: Asset URL could not be found or is null."
+          exit 1
+        fi
+
         echo "Asset URL: $asset_url"
         echo "ASSET_URL=$asset_url" >> $GITHUB_ENV
 
