@@ -55,7 +55,7 @@ jobs:
         
         FILE_SIZE=$(stat -c%s "CloudXR-SDK_4_0_0.zip")
         
-        if [ "$FILE_SIZE" -le 100 ]; then 
+        if [ "$FILE_SIZE" -le 10000 ]; then 
           echo "Downloaded file is too small. Contents of the file:";
           cat CloudXR-SDK_4_0_0.zip;
           exit 1; 
