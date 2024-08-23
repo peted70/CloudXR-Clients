@@ -15,14 +15,20 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    # Use a GitHub token to authenticate and download the release asset
-    - name: Download release asset with authentication
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub automatically provides this token in Actions
+    - name: Fetch Release Metadata
+      id: fetch_release
       run: |
-        curl -L -o CloudXR-SDK_4_0_0.zip -H "Authorization: token $GITHUB_TOKEN" https://github.com/peted70/CloudXR-Clients/releases/download/SDK_4.0.0/CloudXR-SDK_4_0_0.zip
-    
+        release_info=$(curl -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/peted70/CloudXR-Clients/releases/latest)
+        echo "$release_info" > release_info.json
+        asset_url=$(echo "$release_info" | jq -r '.assets[] | select(.name == "CloudXR-SDK_4_0_0.zip") | .browser_download_url')
+        echo "Asset URL: $asset_url"
+        echo "ASSET_URL=$asset_url" >> $GITHUB_ENV
+
+    - name: Download Release Asset
+      run: |
+        curl -L -H "Authorization: token $GITHUB_TOKEN" -o CloudXR-SDK_4_0_0.zip $ASSET_URL    
        # Check if the download was successful and verify the file size
+    
     - name: Verify download
       run: |
         if [ ! -f "CloudXR-SDK_4_0_0.zip" ]; then 
