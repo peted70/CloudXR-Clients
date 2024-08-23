@@ -14,12 +14,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Download release asset
+    
+    # Use a GitHub token to authenticate and download the release asset
+    - name: Download release asset with authentication
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub automatically provides this token in Actions
       run: |
-          curl -L -o CloudXR-SDK_4_0_0.zip https://github.com/peted70/CloudXR-Clients/releases/download/SDK_4.0.0/CloudXR-SDK_4_0_0.zip
+        curl -L -o CloudXR-SDK_4_0_0.zip -H "Authorization: token $GITHUB_TOKEN" https://github.com/peted70/CloudXR-Clients/releases/download/SDK_4.0.0/CloudXR-SDK_4_0_0.zip
+    
     - name: Verify ZIP file download
       run: |
         if [ ! -f "CloudXR-SDK_4_0_0.zip" ]; then echo "Download failed"; exit 1; fi
         if [ $(stat -c%s "CloudXR-SDK_4_0_0.zip") -le 100 ]; then echo "Downloaded file is too small"; exit 1; fi
+    
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
