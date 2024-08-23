@@ -17,5 +17,9 @@ jobs:
     - name: Download release asset
       run: |
           curl -L -o CloudXR-SDK_4_0_0.zip https://github.com/peted70/CloudXR-Clients/releases/download/SDK_4.0.0/CloudXR-SDK_4_0_0.zip
+    - name: Verify ZIP file download
+      run: |
+        if [ ! -f "CloudXR-SDK_4_0_0.zip" ]; then echo "Download failed"; exit 1; fi
+        if [ $(stat -c%s "CloudXR-SDK_4_0_0.zip") -le 100 ]; then echo "Downloaded file is too small"; exit 1; fi
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
