@@ -19,7 +19,7 @@ jobs:
       id: fetch_release
       run: |
         # Fetch the release metadata
-        release_info=$(curl -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" https://api.github.com/repos/peted70/CloudXR-Clients/releases/latest)
+        release_info=$(curl -H "Authorization: token ${{ secrets.PAT }}" -H "Accept: application/vnd.github+json" https://api.github.com/repos/peted70/CloudXR-Clients/releases/latest)
         echo "$release_info" > release_info.json
 
         # Print the release info for debugging
@@ -38,7 +38,7 @@ jobs:
 
     - name: Download Release Asset
       run: |
-        curl -L -H "Authorization: token $GITHUB_TOKEN" -o CloudXR-SDK_4_0_0.zip $ASSET_URL    
+        curl -L -H "Authorization: token ${{ secrets.PAT }}" -o CloudXR-SDK_4_0_0.zip $ASSET_URL    
        # Check if the download was successful and verify the file size
     
     - name: Verify download
