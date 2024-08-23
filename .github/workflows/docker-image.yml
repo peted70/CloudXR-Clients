@@ -44,7 +44,7 @@ jobs:
           -H "Authorization: Bearer ${{ secrets.PAT }}" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
           -o CloudXR-SDK_4_0_0.zip \
-          $ASSET_URL       
+          $ASSET_URL -v       
           
     # Check if the download was successful and verify the file size
     - name: Verify download
