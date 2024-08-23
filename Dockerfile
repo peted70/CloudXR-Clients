@@ -33,9 +33,6 @@ RUN wget -O /oboe/oboe-1.5.0.aar https://github.com/google/oboe/releases/downloa
 RUN mkdir -p /ovr-sdk
 RUN wget -O /ovr-sdk/ovr-mobile-sdk.zip https://securecdn.oculus.com/binaries/download/?id=4260475480682092
 
-# Unzip and clean up
-#RUN unzip /ovr-sdk/ovr-mobile-sdk.zip -d /ovr-sdk && rm /ovr-sdk/ovr-mobile-sdk.zip
-
 # Copy and unzip source code from build context
 COPY CloudXR-SDK_4_0_0.zip /CloudXR-SDK_4_0_0.zip
 
@@ -48,13 +45,10 @@ RUN mkdir -p /CloudXR-SDK_4_0_0 && unzip /CloudXR-SDK_4_0_0.zip -d /CloudXR-SDK_
 # List the contents of the directory to ensure it's unzipped correctly
 RUN ls -lh /CloudXR-SDK_4_0_0
 
-RUN mkdir -p /CloudXR-SDK_4_0_0 && unzip /CloudXR-SDK_4_0_0.zip -d /CloudXR-SDK_4_0_0 && rm /CloudXR-SDK_4_0_0.zip
-
 # Set environment variables for Android SDK
 ENV ANDROID_SDK_ROOT=/sdk
 ENV PATH="$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
 
-# Copy and place SDK files in the correct directories
 # Copy OVR Mobile SDK ZIP and rename it
 RUN cp /ovr-sdk/ovr-mobile-sdk.zip /CloudXR-SDK_4_0_0/Client/Sample/Android/OculusVR/app/libs/ovr_sdk.zip
 
@@ -79,7 +73,7 @@ RUN chown -R vscode:vscode /sdk
 RUN dos2unix /CloudXR-SDK_4_0_0/Client/Sample/Android/OculusVR/gradlew && \
     chmod +x /CloudXR-SDK_4_0_0/Client/Sample/Android/OculusVR/gradlew
 
-    # Ensure Gradle and workspace directories have the correct permissions
+# Ensure Gradle and workspace directories have the correct permissions
 RUN mkdir -p /CloudXR-SDK_4_0_0/Client/Sample/Android/OculusVR/.gradle && \
 chown -R vscode:vscode /CloudXR-SDK_4_0_0
 
