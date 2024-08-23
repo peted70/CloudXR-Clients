@@ -51,7 +51,7 @@ ENV GITHUB_PAT=${GITHUB_TOKEN}
 ENV GITHUB_API_URL=https://api.github.com/repos/peted70/CloudXR-Clients/releases/latest
 
 # Run the script
-RUN /usr/local/bin/fetch_and_download.sh
+RUN /usr/local/bin/download_github_release.sh
 
 ########################## COPY THE SDK FROM THE HOST ######################################
 # Copy and unzip source code from build context
