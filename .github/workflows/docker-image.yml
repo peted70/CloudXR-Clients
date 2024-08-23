@@ -25,17 +25,16 @@ jobs:
         # Print the release info for debugging
         cat release_info.json
 
-        # Extract the asset URL
-        asset_url=$(echo "$release_info" | jq -r '.assets[] | select(.name == "CloudXR-SDK_4_0_0.zip") | .browser_download_url')
-
+        # Extract the asset URL from the assets array
+        asset_url=$(echo "$release_info" | jq -r '.assets[] | select(.name == "CloudXR-SDK_4_0_0.zip") | .url')
         if [ -z "$asset_url" ]; then
           echo "Error: Asset URL could not be found or is null."
           exit 1
         fi
 
-        echo "Asset URL: $asset_url"
+        echo "Asset Metadata URL: $asset_url"
         echo "ASSET_URL=$asset_url" >> $GITHUB_ENV
-
+        
     - name: Download Release Asset
       run: |
         # Download the asset using the extracted URL
