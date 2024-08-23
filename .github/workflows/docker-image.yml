@@ -19,32 +19,29 @@ jobs:
       id: fetch_release
       run: |
         # Fetch the release metadata
-        release_info=$(curl -H "Authorization: token ${{ secrets.PAT }}" -H "Accept: application/vnd.github+json" https://api.github.com/repos/peted70/CloudXR-Clients/releases/latest)
+        release_info=$(curl -H "Authorization: Bearer ${{ secrets.PAT }}" -H "Accept: application/vnd.github+json" https://api.github.com/repos/peted70/CloudXR-Clients/releases/latest)
         echo "$release_info" > release_info.json
-
         # Print the release info for debugging
         cat release_info.json
-
-        # Extract the asset URL from the assets array
-        asset_url=$(echo "$release_info" | jq -r '.assets[] | select(.name == "CloudXR-SDK_4_0_0.zip") | .url')
+        # Extract the asset URL
+        asset_url=$(echo "$release_info" | jq -r '.assets[] | select(.name == "CloudXR-SDK_4_0_0.zip") | .browser_download_url')
         if [ -z "$asset_url" ]; then
           echo "Error: Asset URL could not be found or is null."
           exit 1
         fi
-
-        echo "Asset Metadata URL: $asset_url"
+        echo "Asset URL: $asset_url"
         echo "ASSET_URL=$asset_url" >> $GITHUB_ENV
-        
+
     - name: Download Release Asset
       run: |
-        # Download the asset using the extracted URL
-        curl -L \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{ secrets.PAT }}" \
-          -H "X-GitHub-Api-Version: 2022-11-28" \
-          -o CloudXR-SDK_4_0_0.zip \
-          $ASSET_URL -v       
-          
+        echo "Downloading asset from $ASSET_URL"
+        curl -L -H "Authorization: Bearer ${{ secrets.PAT }}" -o CloudXR-SDK_4_0_0.zip "$ASSET_URL"
+        ls -lh CloudXR-SDK_4_0_0.zip
+        file CloudXR-SDK_4_0_0.zip
+        head -n 20 CloudXR-SDK_4_0_0.zip
+      env:
+        ASSET_URL: ${{ env.ASSET_URL }}          
+    
     # Check if the download was successful and verify the file size
     - name: Verify download
       run: |
