@@ -56,16 +56,16 @@ RUN /usr/local/bin/download_github_release.sh
 ########################## COPY THE SDK FROM THE HOST ######################################
 # Copy and unzip source code from build context
 #COPY CloudXR-SDK_4_0_0.zip /CloudXR-SDK_4_0_0.zip
+#############################################################################################
 
 # Verify the file size
-#RUN ls -lh /CloudXR-SDK_4_0_0.zip
+RUN ls -lh /CloudXR-SDK_4_0_0.zip
 
 # Attempt to unzip the file
-#RUN mkdir -p /CloudXR-SDK_4_0_0 && unzip /CloudXR-SDK_4_0_0.zip -d /CloudXR-SDK_4_0_0
+RUN mkdir -p /CloudXR-SDK_4_0_0 && unzip /CloudXR-SDK_4_0_0.zip -d /CloudXR-SDK_4_0_0
 
 # List the contents of the directory to ensure it's unzipped correctly
-#RUN ls -lh /CloudXR-SDK_4_0_0
-#############################################################################################
+RUN ls -lh /CloudXR-SDK_4_0_0
 
 # Set environment variables for Android SDK
 ENV ANDROID_SDK_ROOT=/sdk
