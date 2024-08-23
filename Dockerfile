@@ -3,6 +3,7 @@ FROM ubuntu:22.04
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     curl \
+    jq \
     unzip \
     dos2unix \
     openjdk-11-jdk \
@@ -14,6 +15,9 @@ RUN apt-get update && apt-get install -y \
     adb \
     wget \
     software-properties-common
+
+# Define build argument for PAT
+ARG GITHUB_TOKEN
 
 # Install Android SDK
 RUN mkdir -p /sdk
@@ -33,17 +37,35 @@ RUN wget -O /oboe/oboe-1.5.0.aar https://github.com/google/oboe/releases/downloa
 RUN mkdir -p /ovr-sdk
 RUN wget -O /ovr-sdk/ovr-mobile-sdk.zip https://securecdn.oculus.com/binaries/download/?id=4260475480682092
 
+########################## DOWNLOAD THE SDK FROM THE GITHUB LATEST RELEASE #################
+
+# Fetch release metadata, extract asset ID, and download asset
+# Copy the script into the Docker image
+COPY download_github_release.sh /usr/local/bin/download_github_release.sh
+
+# Make the script executable
+RUN chmod +x /usr/local/bin/download_github_release.sh
+
+# Set environment variables
+ENV GITHUB_PAT=${GITHUB_TOKEN}
+ENV GITHUB_API_URL=https://api.github.com/repos/peted70/CloudXR-Clients/releases/latest
+
+# Run the script
+RUN /usr/local/bin/fetch_and_download.sh
+
+########################## COPY THE SDK FROM THE HOST ######################################
 # Copy and unzip source code from build context
-COPY CloudXR-SDK_4_0_0.zip /CloudXR-SDK_4_0_0.zip
+#COPY CloudXR-SDK_4_0_0.zip /CloudXR-SDK_4_0_0.zip
 
 # Verify the file size
-RUN ls -lh /CloudXR-SDK_4_0_0.zip
+#RUN ls -lh /CloudXR-SDK_4_0_0.zip
 
 # Attempt to unzip the file
-RUN mkdir -p /CloudXR-SDK_4_0_0 && unzip /CloudXR-SDK_4_0_0.zip -d /CloudXR-SDK_4_0_0
+#RUN mkdir -p /CloudXR-SDK_4_0_0 && unzip /CloudXR-SDK_4_0_0.zip -d /CloudXR-SDK_4_0_0
 
 # List the contents of the directory to ensure it's unzipped correctly
-RUN ls -lh /CloudXR-SDK_4_0_0
+#RUN ls -lh /CloudXR-SDK_4_0_0
+#############################################################################################
 
 # Set environment variables for Android SDK
 ENV ANDROID_SDK_ROOT=/sdk
