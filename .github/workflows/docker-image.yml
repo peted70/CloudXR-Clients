@@ -18,5 +18,6 @@ jobs:
       run: docker build --build-arg GITHUB_TOKEN=${{ secrets.PAT }} . --file Dockerfile --tag cloudxr-dev-env:latest
     # Run the command inside the Docker container to create the APK
     - name: Build APK
-      run: docker run --name my-container cloudxr-dev-env:latest bash -c "/CloudXR-SDK_4_0_0/Client/Sample/Android/OculusVR/gradlew build --info"
+      run: docker run --name my-container -w /CloudXR-SDK_4_0_0/Client/Sample/Android/OculusVR cloudxr-dev-env:latest bash -c "./gradlew build --info"
+
 
