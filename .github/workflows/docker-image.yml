@@ -20,7 +20,7 @@ jobs:
     - name: Build APK
       run: docker run --name my-container -w /CloudXR-SDK_4_0_0/Client/Sample/Android/OculusVR cloudxr-dev-env:latest bash -c "./gradlew build"
     - name: Locate APK
-      run: docker run --name my-container2 cloudxr-dev-env:latest bash -c "find /CloudXR-SDK_4_0_0/Client/Sample/Android/OculusVR/ -name '*.apk'"
+      run: docker run --name my-container2 cloudxr-dev-env:latest bash -c "find / -name '*.apk'"
 
 
 
