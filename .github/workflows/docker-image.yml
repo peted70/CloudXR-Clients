@@ -16,3 +16,7 @@ jobs:
     - uses: actions/checkout@v4            
     - name: Build the Docker image
       run: docker build --build-arg GITHUB_TOKEN=${{ secrets.PAT }} . --file Dockerfile --tag my-image-name:$(date +%s)
+    # Run the command inside the Docker container to create the APK
+    - name: Build APK
+      run: docker run --name my-container my-image-name:$(date +%s) bash -c "/CloudXR-SDK_4_0_0/Client/Sample/Android/OculusVR/gradlew build"
+
