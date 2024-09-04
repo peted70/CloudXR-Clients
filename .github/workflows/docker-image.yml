@@ -23,14 +23,12 @@ jobs:
     - name: Copy APK to host
       run: docker cp my-container:/CloudXR-SDK_4_0_0/Client/Sample/Android/OculusVR/app/build/outputs/apk/debug/app-debug.apk .
 
-    # Publish the APK as a GitHub Package
-    - name: Publish APK as GitHub Package
-      run: |
-        curl -X PUT \
-          -u ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} \
-          -H "Content-Type: application/vnd.android.package-archive" \
-          --data-binary "@app-debug.apk" \
-          "https://uploads.github.com/repos/${{ github.repository }}/packages/generic/cloudxr-apk/1.0.0/app-debug.apk?name=app-debug.apk"
+    # Upload the APK as an artifact
+    - name: Upload APK as Artifact
+      uses: actions/upload-artifact@v3
+      with:
+          name: app-debug-apk
+          path: app-debug.apk
 
     # Cleanup the container
     - name: Cleanup
