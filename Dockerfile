@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM --platform=linux/amd64 ubuntu:22.04
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
@@ -18,6 +18,9 @@ RUN apt-get update && apt-get install -y \
 
 # Define build argument for PAT
 ARG GITHUB_TOKEN
+
+# Print the build argument to verify it's being set
+RUN echo "GITHUB_TOKEN is: ${GITHUB_TOKEN}"
 
 # Install Android SDK
 RUN mkdir -p /sdk
