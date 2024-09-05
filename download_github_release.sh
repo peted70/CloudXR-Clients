@@ -21,7 +21,7 @@ while [ "$GITHUB_API_URL" != "null" ]; do
 
   # Loop through each release on this page
   for release in $(jq -c '.[]' releases_info.json); do
-    echo "Checking release: $(echo $release | jq -r '.name')"
+    echo "Checking release:"
     # Check if this release has a matching asset
     asset_id=$(echo $release | jq -r '.assets[] | select(.name | startswith("CloudXR-SDK") and endswith(".zip")) | .id')
     echo "asset id is $asset_id"
