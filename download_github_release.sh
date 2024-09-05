@@ -6,6 +6,9 @@ set -eux
 #GITHUB_API_URL="https://api.github.com/repos/peted70/CloudXR-Clients/releases?per_page=100"
 found_release=false
 
+echo "sdk pat is $GITHUB_SDK_PAT"
+echo "api url is $GITHUB_API_URL"
+
 # Loop through all pages of releases
 while [ "$GITHUB_API_URL" != "null" ]; do
   # Fetch the release metadata and save it to a file
