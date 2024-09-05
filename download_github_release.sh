@@ -12,6 +12,10 @@ while [ "$GITHUB_API_URL" != "null" ]; do
   curl -H "Authorization: Bearer $GITHUB_SDK_PAT" -H "Accept: application/vnd.github+json" $GITHUB_API_URL \
       -o releases_info.json
 
+  # Print the contents of releases_info.json
+  echo "Contents of releases_info.json:"
+  cat releases_info.json
+
   # Loop through each release on this page
   for release in $(jq -c '.[]' releases_info.json); do
     # Check if this release has a matching asset
