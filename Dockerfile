@@ -51,7 +51,9 @@ RUN chmod +x /usr/local/bin/download_github_release.sh
 
 # Set environment variables
 ENV GITHUB_PAT=${GITHUB_TOKEN}
-ENV GITHUB_API_URL=https://api.github.com/repos/peted70/CloudXR-Clients/releases/latest
+ENV GITHUB_SDK_PAT=${GITHUB_SDK_TOKEN}
+
+ENV GITHUB_API_URL=https://api.github.com/repos/peted70/CloudXR-SDK/releases/latest
 
 # Run the script
 RUN /usr/local/bin/download_github_release.sh

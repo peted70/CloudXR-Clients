@@ -3,13 +3,13 @@
 set -eux
 
 # Base URL for fetching releases
-GITHUB_API_URL="https://api.github.com/repos/peted70/CloudXR-Clients/releases?per_page=100"
+#GITHUB_API_URL="https://api.github.com/repos/peted70/CloudXR-Clients/releases?per_page=100"
 found_release=false
 
 # Loop through all pages of releases
 while [ "$GITHUB_API_URL" != "null" ]; do
   # Fetch the release metadata and save it to a file
-  curl -H "Authorization: Bearer $GITHUB_PAT" -H "Accept: application/vnd.github+json" $GITHUB_API_URL \
+  curl -H "Authorization: Bearer $GITHUB_SDK_PAT" -H "Accept: application/vnd.github+json" $GITHUB_API_URL \
       -o releases_info.json
 
   # Loop through each release on this page
@@ -40,7 +40,7 @@ fi
 echo "Downloading asset with ID $asset_id and saving it as $asset_name"
 
 # Download the asset and save it with its original name
-curl -L -H "Accept: application/octet-stream" -H "Authorization: Bearer $GITHUB_PAT" \
+curl -L -H "Accept: application/octet-stream" -H "Authorization: Bearer $GITHUB_SDK_PAT" \
      -H "X-GitHub-Api-Version: 2022-11-28" \
      "$asset_url" \
      --output "$asset_name"
