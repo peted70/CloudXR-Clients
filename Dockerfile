@@ -19,6 +19,9 @@ RUN apt-get update && apt-get install -y \
 # Define build argument for PAT
 ARG GITHUB_TOKEN
 
+# PAT for the repo with the CloudXR repo
+ARG GITHUB_SDK_TOKEN
+
 # Print the build argument to verify it's being set
 RUN echo "GITHUB_TOKEN is: ${GITHUB_TOKEN}"
 
