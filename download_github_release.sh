@@ -19,20 +19,37 @@ while [ "$GITHUB_API_URL" != "null" ]; do
   echo "Contents of releases_info.json:"
   cat releases_info.json
 
-  # Loop through each release on this page
-  for release in $(jq -c '.[]' releases_info.json); do
+  # Read the JSON file and loop through each release
+  jq -c '.[]' releases_info.json | while read -r release; do
     # Check if this release has a matching asset
-    asset_id=$(echo $release | jq -r '.assets[] | select(.name | startswith("CloudXR-SDK") and endswith(".zip")) | .id')
+    asset_id=$(echo "$release" | jq -r '.assets[] | select(.name | startswith("CloudXR-SDK") and endswith(".zip")) | .id')
 
     # If a matching asset is found, download it
     if [ -n "$asset_id" ]; then
-      echo "Found asset with ID $asset_id in release: $(echo $release | jq -r '.name')"
+      echo "Found asset with ID $asset_id in release: $(echo "$release" | jq -r '.name')"
       found_release=true
-      asset_url=$(echo $release | jq -r ".assets[] | select(.id == $asset_id) | .url")
-      asset_name=$(echo $release | jq -r ".assets[] | select(.id == $asset_id) | .name")
-      break 2  # Break out of both loops
+      asset_url=$(echo "$release" | jq -r ".assets[] | select(.id == $asset_id) | .url")
+      asset_name=$(echo "$release" | jq -r ".assets[] | select(.id == $asset_id) | .name")
+      echo "Asset URL: $asset_url"
+      echo "Asset Name: $asset_name"
+      break  # Break out of the loop
     fi
   done
+
+  # Loop through each release on this page
+  # for release in $(jq -c '.[]' releases_info.json); do
+  #   # Check if this release has a matching asset
+  #   asset_id=$(echo $release | jq -r '.assets[] | select(.name | startswith("CloudXR-SDK") and endswith(".zip")) | .id')
+
+  #   # If a matching asset is found, download it
+  #   if [ -n "$asset_id" ]; then
+  #     echo "Found asset with ID $asset_id in release: $(echo $release | jq -r '.name')"
+  #     found_release=true
+  #     asset_url=$(echo $release | jq -r ".assets[] | select(.id == $asset_id) | .url")
+  #     asset_name=$(echo $release | jq -r ".assets[] | select(.id == $asset_id) | .name")
+  #     break 2  # Break out of both loops
+  #   fi
+  # done
 
   # If no matching asset was found, get the next page URL
   GITHUB_API_URL=$(jq -r '. | if .links.next then .links.next else "null" end' releases_info.json)
