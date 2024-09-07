@@ -20,6 +20,7 @@ curl -H "Authorization: Bearer $GITHUB_SDK_PAT" -H "Accept: application/vnd.gith
 echo "Contents of latest_release.json:"
 cat latest_release.json
 
+release=$(<latest_release.json)
 
 # Extract the URL for the asset containing the partial name
 asset_id=$(jq -r --arg partial_name "$partial_asset_name" \
@@ -31,11 +32,11 @@ if [ -n "$asset_id" ]; then
   found_release=true
   
   download_url=$(jq -r --arg asset_id "$asset_id" \
-    '.assets[] | select(.id == $asset_id) | .url' \
+    '.assets[] | select(.id == ($asset_id | tonumber)) | .url' \
     latest_release.json)
 
   asset_name=$(jq -r --arg asset_id "$asset_id"\
-    '.assets[] | select(.id == $asset_id) | .name' \
+    '.assets[] | select(.id == ($asset_id | tonumber)) | .name' \
     latest_release.json)
 fi
 
