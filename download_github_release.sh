@@ -20,24 +20,25 @@ curl -H "Authorization: Bearer $GITHUB_SDK_PAT" -H "Accept: application/vnd.gith
 echo "Contents of latest_release.json:"
 cat latest_release.json
 
-# Read the entire JSON file once into a variable
-release_data=$(<latest_release.json)
 
-# Extract the asset ID for the asset containing the partial name
-asset_id=$(echo "$release_data" | jq -r --arg partial_name "$partial_asset_name" \
-    '.assets[] | select(.name | contains($partial_name)) | .id')
+# Extract the URL for the asset containing the partial name
+asset_id=$(jq -r --arg partial_name "$partial_asset_name" \
+    '.assets[] | select(.name | contains($partial_name)) | .id' \
+    latest_release.json)
 
 if [ -n "$asset_id" ]; then
-  echo "Found asset with ID $asset_id in release: $(echo "$release_data" | jq -r '.name')"
+  echo "Found asset with ID $asset_id in release: $(echo $release | jq -r '.name')"
   found_release=true
+  
+  download_url=$(jq -r --arg asset_id "$asset_id" \
+    '.assets[] | select(.id == $asset_id) | .url' \
+    latest_release.json)
 
-  # Extract download URL and asset name using the parsed release data
-  download_url=$(echo "$release_data" | jq -r --arg asset_id "$asset_id" \
-    '.assets[] | select(.id == ($asset_id | tonumber)) | .url')
-
-  asset_name=$(echo "$release_data" | jq -r --arg asset_id "$asset_id" \
-    '.assets[] | select(.id == ($asset_id | tonumber)) | .name')
+  asset_name=$(jq -r --arg asset_id "$asset_id"\
+    '.assets[] | select(.id == $asset_id) | .name' \
+    latest_release.json)
 fi
+
 
 # Loop through all pages of releases
 # while [ "$GITHUB_API_URL" != "null" ]; do
