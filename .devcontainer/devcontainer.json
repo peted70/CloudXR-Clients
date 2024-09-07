@@ -9,8 +9,8 @@
 		"dockerfile": "../Dockerfile",
 		"args": {
 			"GITHUB_SDK_TOKEN": "${env:GITHUB_SDK_TOKEN}",
-			"SDK_REPO":"${env:SDK_REPO}",
-			"SDK_REPO_OWNER":"${env:SDK_REPO_OWNER}"
+			"SDK_REPO":"${env:GITHUB_SDK_REPO}",
+			"SDK_REPO_OWNER":"${env:GITHUB_SDK_REPO_OWNER}"
 		}
 	}
 	// Features to add to the dev container. More info: https://containers.dev/features.
