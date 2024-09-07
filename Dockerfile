@@ -67,7 +67,7 @@ RUN /usr/local/bin/download_github_release.sh
 RUN ls -lh /${SDK_FILENAME}
 
 # Attempt to unzip the file
-RUN mkdir -p /${SDK_FILENAME%.*} && unzip /SDK_FILENAME -d /${SDK_FILENAME%.*}
+RUN mkdir -p /${SDK_FILENAME%.*} && unzip /${SDK_FILENAME} -d /${SDK_FILENAME%.*}
 
 # List the contents of the directory to ensure it's unzipped correctly
 RUN ls -lh /${SDK_FILENAME%.*}
