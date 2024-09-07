@@ -31,7 +31,7 @@ if [ -n "$asset_id" ]; then
   echo "Found asset with ID $asset_id in release: $(echo $release | jq -r '.name')"
   found_release=true
   
-  download_url=$(jq -r --arg asset_id "$asset_id" \
+  asset_url=$(jq -r --arg asset_id "$asset_id" \
     '.assets[] | select(.id == ($asset_id | tonumber)) | .url' \
     latest_release.json)
 
