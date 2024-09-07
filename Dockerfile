@@ -61,7 +61,7 @@ ENV GITHUB_API_URL=https://api.github.com/repos/peted70/CloudXR-SDK/releases/lat
 #############################################################################################
 
 # Run the script
-RUN source /usr/local/bin/download_github_release.sh && \
+RUN . /usr/local/bin/download_github_release.sh && \
     mkdir -p /${SDK_FILENAME%.*} && \
     unzip /${SDK_FILENAME} -d /${SDK_FILENAME%.*}
 
