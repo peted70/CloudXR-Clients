@@ -55,6 +55,8 @@ ENV GITHUB_SDK_PAT=${GITHUB_SDK_TOKEN}
 
 ENV GITHUB_API_URL=https://api.github.com/repos/peted70/CloudXR-SDK/releases/latest
 
+ENV SDK_FILENAME=''
+
 # Run the script
 RUN /usr/local/bin/download_github_release.sh
 

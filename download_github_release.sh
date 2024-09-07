@@ -50,7 +50,7 @@ curl -L -H "Accept: application/octet-stream" -H "Authorization: Bearer $GITHUB_
      "$asset_url" \
      --output "$asset_name"
 
-export SDK_FILENAME=$asset_name
+SDK_FILENAME=$asset_name
 
 # Verify the downloaded file
 ls -lh "$asset_name"
