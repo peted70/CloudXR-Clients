@@ -21,6 +21,8 @@ ARG GITHUB_TOKEN
 
 # PAT for the repo with the CloudXR repo
 ARG GITHUB_SDK_TOKEN
+ARG SDK_REPO_OWNER
+ARG SDK_REPO
 
 # Install Android SDK
 RUN mkdir -p /sdk
@@ -53,7 +55,8 @@ RUN chmod +x /usr/local/bin/download_github_release.sh
 ENV GITHUB_PAT=${GITHUB_TOKEN}
 ENV GITHUB_SDK_PAT=${GITHUB_SDK_TOKEN}
 
-ENV GITHUB_API_URL=https://api.github.com/repos/peted70/CloudXR-SDK/releases/latest
+# peted70 CloudXR-SDK
+ENV GITHUB_API_URL=https://api.github.com/repos/${SDK_REPO_OWNER}/${SDK_REPO}/releases/latest
 
 ########################## COPY THE SDK FROM THE HOST ######################################
 # Copy and unzip source code from build context
