@@ -55,24 +55,18 @@ ENV GITHUB_SDK_PAT=${GITHUB_SDK_TOKEN}
 
 ENV GITHUB_API_URL=https://api.github.com/repos/peted70/CloudXR-SDK/releases/latest
 
-ENV SDK_FILENAME=''
-
-# Run the script
-RUN /usr/local/bin/download_github_release.sh
-
 ########################## COPY THE SDK FROM THE HOST ######################################
 # Copy and unzip source code from build context
 #COPY CloudXR-SDK_4_0_0.zip /CloudXR-SDK_4_0_0.zip
 #############################################################################################
 
-# Verify the file size
-RUN ls -lh /${SDK_FILENAME}
+# Run the script
+RUN source /usr/local/bin/download_github_release.sh && \
+    mkdir -p /${SDK_FILENAME%.*} && \
+    unzip /${SDK_FILENAME} -d /${SDK_FILENAME%.*}
 
 # Attempt to unzip the file
-RUN mkdir -p /${SDK_FILENAME%.*} && unzip /${SDK_FILENAME} -d /${SDK_FILENAME%.*}
-
-# List the contents of the directory to ensure it's unzipped correctly
-RUN ls -lh /${SDK_FILENAME%.*}
+#RUN mkdir -p /${SDK_FILENAME%.*} && unzip /${SDK_FILENAME} -d /${SDK_FILENAME%.*}
 
 # Set environment variables for Android SDK
 ENV ANDROID_SDK_ROOT=/sdk
