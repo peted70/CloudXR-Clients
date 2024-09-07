@@ -16,9 +16,6 @@ RUN apt-get update && apt-get install -y \
     wget \
     software-properties-common
 
-# Define build argument for PAT
-ARG GITHUB_TOKEN
-
 # PAT for the repo with the CloudXR repo
 ARG GITHUB_SDK_TOKEN
 ARG SDK_REPO_OWNER
@@ -52,7 +49,6 @@ COPY download_github_release.sh /usr/local/bin/download_github_release.sh
 RUN chmod +x /usr/local/bin/download_github_release.sh
 
 # Set environment variables
-ENV GITHUB_PAT=${GITHUB_TOKEN}
 ENV GITHUB_SDK_PAT=${GITHUB_SDK_TOKEN}
 
 # peted70 CloudXR-SDK
@@ -63,24 +59,24 @@ ENV GITHUB_API_URL=https://api.github.com/repos/${SDK_REPO_OWNER}/${SDK_REPO}/re
 #COPY CloudXR-SDK_4_0_0.zip /CloudXR-SDK_4_0_0.zip
 #############################################################################################
 
+ENV SDK_LOCATION="CloudXR-SDK"
+
 # Run the script to download the SDK from a separate repo, unzip it and store the name
 # of the zip file in a file so we can refer to it later.
 RUN . /usr/local/bin/download_github_release.sh && \
-    mkdir -p /${SDK_FILENAME%.*} && \
-    unzip /${SDK_FILENAME} -d /${SDK_FILENAME%.*} && \
+    mkdir -p /${SDK_LOCATION} && \
+    unzip /${SDK_FILENAME} -d /${SDK_LOCATION} && \
     echo "export SDK_FILENAME=${SDK_FILENAME}" > /env_vars
 
 # Set environment variables for Android SDK
 ENV ANDROID_SDK_ROOT=/sdk
 ENV PATH="$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
 
-RUN . /env_vars && \
-    # Copy OVR Mobile SDK ZIP and rename it
-    cp /ovr-sdk/ovr-mobile-sdk.zip /${SDK_FILENAME%.*}/Client/Sample/Android/OculusVR/app/libs/ovr_sdk.zip && \
+RUN cp /ovr-sdk/ovr-mobile-sdk.zip /${SDK_LOCATION}/Client/Sample/Android/OculusVR/app/libs/ovr_sdk.zip && \
     # Copy Google Oboe SDK AAR file
-    cp /oboe/oboe-1.5.0.aar /${SDK_FILENAME%.*}/Client/Sample/Android/OculusVR/app/libs/ && \
+    cp /oboe/oboe-1.5.0.aar /${SDK_LOCATION}/Client/Sample/Android/OculusVR/app/libs/ && \
     # Copy CloudXR SDK client package
-    cp /${SDK_FILENAME%.*}/Client/Lib/Android/CloudXR.aar /${SDK_FILENAME%.*}/Client/Sample/Android/OculusVR/app/libs/
+    cp /${SDK_LOCATION}/Client/Lib/Android/CloudXR.aar /${SDK_LOCATION}/Client/Sample/Android/OculusVR/app/libs/
 
 # Create a user to avoid running as root
 RUN useradd -ms /bin/bash vscode
@@ -93,13 +89,11 @@ USER root
 # Set permissions for the SDK directory
 RUN chown -R vscode:vscode /sdk
 
-RUN . /env_vars && \
-    # Convert gradlew line endings
-    dos2unix /${SDK_FILENAME%.*}/Client/Sample/Android/OculusVR/gradlew && \
-    chmod +x /${SDK_FILENAME%.*}/Client/Sample/Android/OculusVR/gradlew && \
+RUN dos2unix /${SDK_LOCATION}/Client/Sample/Android/OculusVR/gradlew && \
+    chmod +x /${SDK_LOCATION}/Client/Sample/Android/OculusVR/gradlew && \
     # Ensure Gradle and workspace directories have the correct permissions
-    mkdir -p /${SDK_FILENAME%.*}/Client/Sample/Android/OculusVR/.gradle && \
-    chown -R vscode:vscode /${SDK_FILENAME%.*}
+    mkdir -p /${SDK_LOCATION}/Client/Sample/Android/OculusVR/.gradle && \
+    chown -R vscode:vscode /${SDK_LOCATION}
 
 RUN . /env_vars && \
     # Use sed to replace the line in the build_sdk.gradle file

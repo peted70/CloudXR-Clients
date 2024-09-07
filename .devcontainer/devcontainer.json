@@ -8,7 +8,9 @@
 		// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
 		"dockerfile": "../Dockerfile",
 		"args": {
-			"GITHUB_TOKEN": "${env:GITHUB_TOKEN}"
+			"GITHUB_SDK_TOKEN": "${env:GITHUB_SDK_TOKEN}",
+			"SDK_REPO":"${env:SDK_REPO}",
+			"SDK_REPO_OWNER":"${env:SDK_REPO_OWNER}"
 		}
 	}
 	// Features to add to the dev container. More info: https://containers.dev/features.
