@@ -101,7 +101,7 @@ RUN dos2unix /${SDK_LOCATION}/Client/Sample/Android/OculusVR/gradlew && \
 
 RUN . /env_vars && \
     # Use sed to replace the line in the build_sdk.gradle file
-    sed -i 's|def C_SHARED_INCLUDE = file("${project.rootDir}/../../shared")|def C_SHARED_INCLUDE = file("${project.rootDir}/../../Shared")|' /${SDK_FILENAME%.*}/Client/Sample/Android/OculusVR/app/build_sdk.gradle
+    sed -i 's|def C_SHARED_INCLUDE = file("${project.rootDir}/../../shared")|def C_SHARED_INCLUDE = file("${project.rootDir}/../../Shared")|' /${SDK_LOCATION}/Client/Sample/Android/OculusVR/app/build_sdk.gradle
 
 # Switch back to the vscode user or the intended user
 USER vscode
