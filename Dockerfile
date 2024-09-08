@@ -21,6 +21,10 @@ ARG GITHUB_SDK_TOKEN
 ARG SDK_REPO_OWNER
 ARG SDK_REPO
 
+RUN echo 'owner = ${SDK_REPO_OWNER}'
+RUN echo 'repo = ${SDK_REPO}''
+
+
 # Install Android SDK
 RUN mkdir -p /sdk
 RUN curl -o sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
