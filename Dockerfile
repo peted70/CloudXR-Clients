@@ -22,7 +22,7 @@ ARG SDK_REPO_OWNER
 ARG SDK_REPO
 
 RUN echo 'owner = ${SDK_REPO_OWNER}'
-RUN echo 'repo = ${SDK_REPO}''
+RUN echo 'repo = ${SDK_REPO}'
 
 
 # Install Android SDK
