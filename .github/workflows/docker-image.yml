@@ -37,18 +37,27 @@ jobs:
     #       name: app-release-apk
     #       path: app-release.apk
 
+    - name: Create a new tag
+      id: create_tag
+      run: |
+        TAG_NAME="v$(date +'%Y%m%d%H%M%S')"  # Create a unique tag based on timestamp
+        git tag $TAG_NAME
+        git push origin $TAG_NAME
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       with:
-        tag_name: ${{ github.ref }}  # This uses the tag that triggered the workflow
-        release_name: Release ${{ github.ref }}
-        body: "Release of version ${{ github.ref }}"
+        tag_name: ${{ steps.create_tag.outputs.TAG_NAME }}  # Use the newly created tag
+        release_name: Release ${{ steps.create_tag.outputs.TAG_NAME }}
+        body: "Automated release of version ${{ steps.create_tag.outputs.TAG_NAME }}"
         draft: false
         prerelease: false
       env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
-  
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Upload Debug APK as Release Asset
       uses: actions/upload-release-asset@v1
       with:
