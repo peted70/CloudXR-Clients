@@ -43,7 +43,7 @@ jobs:
         TAG_NAME="v$(date +'%Y%m%d%H%M%S')"  # Create a unique tag based on timestamp
         git tag $TAG_NAME
         git push origin $TAG_NAME
-        echo "::set-output name=TAG_NAME::$TAG_NAME"  # Set the tag name as an output
+        echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV  # Set the tag name as an environment variable
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -51,9 +51,9 @@ jobs:
       id: create_release
       uses: actions/create-release@v1.1.0
       with:
-        tag_name: ${{ steps.create_tag.outputs.TAG_NAME }}  # Use the newly created tag
-        release_name: Release ${{ steps.create_tag.outputs.TAG_NAME }}
-        body: "Automated release of version ${{ steps.create_tag.outputs.TAG_NAME }}"
+        tag_name: ${{ env.TAG_NAME }}  # Use the newly created tag
+        release_name: Release ${{ env.TAG_NAME }}
+        body: "Automated release of version ${{ env.TAG_NAME }}"
         draft: false
         prerelease: false
       env:
