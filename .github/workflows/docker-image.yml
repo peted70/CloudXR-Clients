@@ -43,6 +43,7 @@ jobs:
         TAG_NAME="v$(date +'%Y%m%d%H%M%S')"  # Create a unique tag based on timestamp
         git tag $TAG_NAME
         git push origin $TAG_NAME
+        echo "::set-output name=TAG_NAME::$TAG_NAME"  # Set the tag name as an output
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
