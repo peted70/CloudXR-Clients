@@ -49,7 +49,7 @@ jobs:
 
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1.1.0
+      uses: actions/create-release@v1.1.4
       with:
         tag_name: ${{ env.TAG_NAME }}  # Use the newly created tag
         release_name: Release ${{ env.TAG_NAME }}
